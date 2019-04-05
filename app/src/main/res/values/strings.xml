@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AdvancedToDoList</string>
+    <string name="hint_title">Title</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="hint_text">Add note</string>
+    <string name="mood_bad">Bad</string>
+    <string name="mood_average">Average</string>
+    <string name="mood_nice">Nice</string>
+    <string name="question">Question</string>
+    <string name="continue_adding">You leave a note, will you add it?</string>
+</resources>
