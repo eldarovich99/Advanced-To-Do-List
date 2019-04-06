@@ -3,8 +3,8 @@ package com.devcolibri.eldarovich99.advancedtodolist.viewmodel
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import com.devcolibri.eldarovich99.advancedtodolist.db.NotesDatabase
 import com.devcolibri.eldarovich99.advancedtodolist.db.NotesRepository
+import com.devcolibri.eldarovich99.advancedtodolist.db.dao.NotesDao
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,8 +12,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class ListViewModel(application: Application): AndroidViewModel(application) { //If you need the application context, use AndroidViewModel, as shown in this codelab.
-    private val repository: NotesRepository
+class ListViewModel(application: Application, private var noteDao: NotesDao, private var repository: NotesRepository): AndroidViewModel(application) { //If you need the application context, use AndroidViewModel, as shown in this codelab.
+    //@Inject lateinit var repository: NotesRepository
     val allNotes: LiveData<List<Note>>
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -21,8 +21,14 @@ class ListViewModel(application: Application): AndroidViewModel(application) { /
     private val scope = CoroutineScope(coroutineContext)
 
     init {
+
+        /*DaggerAppComponent.builder()
+            .appModule(AppModule(getApplication()))
+            .roomModule(RoomModule(getApplication()))
+            .build()
+            .inject(this)
         val noteDao = NotesDatabase.getDatabase(application, scope).notesDao()
-        repository=NotesRepository(noteDao)
+        repository=NotesRepository(noteDao)*/
         allNotes = repository.allNotes
     }
 
