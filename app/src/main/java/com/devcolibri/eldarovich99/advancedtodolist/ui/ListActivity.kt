@@ -10,9 +10,9 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Toast
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
-import com.devcolibri.eldarovich99.advancedtodolist.di.AppModule
-import com.devcolibri.eldarovich99.advancedtodolist.di.DaggerNotesComponent
-import com.devcolibri.eldarovich99.advancedtodolist.di.RoomModule
+import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
+import com.devcolibri.eldarovich99.advancedtodolist.di.modules.AppModule
+import com.devcolibri.eldarovich99.advancedtodolist.di.modules.RoomModule
 import com.devcolibri.eldarovich99.advancedtodolist.services.DelayedMessageService
 import com.devcolibri.eldarovich99.advancedtodolist.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,10 +27,10 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val appComponent = DaggerNotesComponent.builder()
-            .appModule(AppModule())
+        val notesComponent = DaggerNotesComponent.builder().appModule(AppModule())
             .roomModule(RoomModule(application)).build()
-        appComponent.inject(this)
+        //val appComponent = DaggerAppComponent.builder().build()
+        notesComponent.inject(this)
 
         adapter = NoteListAdapter(applicationContext)
         recycler.adapter = adapter

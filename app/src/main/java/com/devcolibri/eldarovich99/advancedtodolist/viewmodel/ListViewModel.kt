@@ -11,8 +11,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
+@Singleton
 class ListViewModel @Inject constructor(application: Application, private var noteDao: NotesDao, private var repository: NotesRepository): AndroidViewModel(application) { //If you need the application context, use AndroidViewModel.
     val allNotes: LiveData<List<Note>>
     private var parentJob = Job()
