@@ -10,10 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class ListViewModel(application: Application, private var noteDao: NotesDao, private var repository: NotesRepository): AndroidViewModel(application) { //If you need the application context, use AndroidViewModel, as shown in this codelab.
-    //@Inject lateinit var repository: NotesRepository
+class ListViewModel @Inject constructor(application: Application, private var noteDao: NotesDao, private var repository: NotesRepository): AndroidViewModel(application) { //If you need the application context, use AndroidViewModel.
     val allNotes: LiveData<List<Note>>
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
