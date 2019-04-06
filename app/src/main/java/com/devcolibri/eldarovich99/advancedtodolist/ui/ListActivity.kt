@@ -26,13 +26,11 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //listViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
 
         val appComponent = DaggerNotesComponent.builder()
             .appModule(AppModule())
             .roomModule(RoomModule(application)).build()
         appComponent.inject(this)
-        appComponent.inject(listViewModel)
 
         adapter = NoteListAdapter(applicationContext)
         recycler.adapter = adapter

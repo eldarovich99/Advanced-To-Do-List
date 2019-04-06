@@ -21,14 +21,6 @@ class ListViewModel(application: Application, private var noteDao: NotesDao, pri
     private val scope = CoroutineScope(coroutineContext)
 
     init {
-
-        /*DaggerAppComponent.builder()
-            .appModule(AppModule(getApplication()))
-            .roomModule(RoomModule(getApplication()))
-            .build()
-            .inject(this)
-        val noteDao = NotesDatabase.getDatabase(application, scope).notesDao()
-        repository=NotesRepository(noteDao)*/
         allNotes = repository.allNotes
     }
 
