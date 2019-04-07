@@ -1,13 +1,11 @@
 package com.devcolibri.eldarovich99.advancedtodolist.di.components
 
-import com.devcolibri.eldarovich99.advancedtodolist.di.modules.AppModule
-import com.devcolibri.eldarovich99.advancedtodolist.di.modules.RoomModule
+import com.devcolibri.eldarovich99.advancedtodolist.di.annotations.ActivityScope
 import com.devcolibri.eldarovich99.advancedtodolist.ui.ListActivity
-import dagger.Component
-import javax.inject.Singleton
+import dagger.Subcomponent
 
-@Component(modules = [AppModule::class, RoomModule::class])
-@Singleton
+@Subcomponent
+@ActivityScope
 interface NotesComponent{
     fun inject(activity: ListActivity)
 }

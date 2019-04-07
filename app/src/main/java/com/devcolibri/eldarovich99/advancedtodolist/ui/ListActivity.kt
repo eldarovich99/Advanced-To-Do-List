@@ -1,5 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui
 
+//import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Intent
@@ -10,8 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Toast
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
-import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
-import com.devcolibri.eldarovich99.advancedtodolist.di.modules.AppModule
+import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerAppComponent
 import com.devcolibri.eldarovich99.advancedtodolist.di.modules.RoomModule
 import com.devcolibri.eldarovich99.advancedtodolist.services.DelayedMessageService
 import com.devcolibri.eldarovich99.advancedtodolist.viewmodel.ListViewModel
@@ -27,9 +27,9 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val notesComponent = DaggerNotesComponent.builder().appModule(AppModule())
-            .roomModule(RoomModule(application)).build()
-        //val appComponent = DaggerAppComponent.builder().build()
+        //val notesComponent = DaggerNotesComponent.builder().application(application).build()
+        val appComponent = DaggerAppComponent.builder().roomModule(RoomModule(application)).build()
+        val notesComponent = appComponent.plusNoteComponent()
         notesComponent.inject(this)
 
         adapter = NoteListAdapter(applicationContext)

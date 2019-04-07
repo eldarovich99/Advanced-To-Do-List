@@ -9,12 +9,18 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RoomModule(application: Application) {
+class RoomModule(var application: Application){
     var database: NotesDatabase = Room.databaseBuilder(application, NotesDatabase::class.java, "notes-db").build()
 
     @Provides
     @Singleton
-    fun providesNotesDatabase(): NotesDatabase{
+    fun providesApplication(): Application{
+        return application
+    }
+
+    @Provides
+    @Singleton
+    fun providesNotesDatabase(application: Application) : NotesDatabase{
         return database
     }
 
