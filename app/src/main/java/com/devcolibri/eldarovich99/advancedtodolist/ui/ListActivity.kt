@@ -3,16 +3,17 @@ package com.devcolibri.eldarovich99.advancedtodolist.ui
 //import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
 import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Toast
+import com.devcolibri.eldarovich99.advancedtodolist.Injector
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
-import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerAppComponent
-import com.devcolibri.eldarovich99.advancedtodolist.di.modules.RoomModule
+import com.devcolibri.eldarovich99.advancedtodolist.di.factories.ViewModelFactory
 import com.devcolibri.eldarovich99.advancedtodolist.services.DelayedMessageService
 import com.devcolibri.eldarovich99.advancedtodolist.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,16 +22,15 @@ import javax.inject.Inject
 
 class ListActivity : AppCompatActivity() {
     @Inject lateinit var listViewModel: ListViewModel
+    @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter:NoteListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val notesComponent = DaggerNotesComponent.builder().application(application).build()
-        val appComponent = DaggerAppComponent.builder().roomModule(RoomModule(application)).build()
-        val notesComponent = appComponent.plusNoteComponent()
-        notesComponent.inject(this)
+        Injector.getAppComponent().inject(this)
+        listViewModel = ViewModelProviders.of(this, viewModelFactory).get(listViewModel:: class.java)
 
         adapter = NoteListAdapter(applicationContext)
         recycler.adapter = adapter
