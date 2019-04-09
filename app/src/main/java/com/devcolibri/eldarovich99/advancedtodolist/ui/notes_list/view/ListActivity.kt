@@ -1,4 +1,4 @@
-package com.devcolibri.eldarovich99.advancedtodolist.ui
+package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.view
 
 //import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
 import android.app.Activity
@@ -15,7 +15,10 @@ import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.di.factories.ViewModelFactory
 import com.devcolibri.eldarovich99.advancedtodolist.services.DelayedMessageService
-import com.devcolibri.eldarovich99.advancedtodolist.viewmodel.ListViewModel
+import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
+import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter.NoteListAdapter
+import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.AddNoteActivity
+import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
@@ -23,7 +26,7 @@ import javax.inject.Inject
 class ListActivity : AppCompatActivity() {
     @Inject lateinit var listViewModel: ListViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var adapter:NoteListAdapter
+    private lateinit var adapter: NoteListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,9 @@ class ListActivity : AppCompatActivity() {
         })
         add_image_button.setOnClickListener{
             val intent = Intent(this@ListActivity, AddNoteActivity::class.java)
-            startActivityForResult(intent, newWordActivityRequestCode)
+            startActivityForResult(intent,
+                newWordActivityRequestCode
+            )
         }
 
         val simpleItemTouchCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
@@ -68,7 +73,8 @@ class ListActivity : AppCompatActivity() {
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.let {
                 val note = Note(Date(data.getLongExtra(AddNoteActivity.DATE, -1)),
-                    data.getStringExtra(AddNoteActivity.TITLE), data.getStringExtra(AddNoteActivity.TEXT),
+                    data.getStringExtra(AddNoteActivity.TITLE), data.getStringExtra(
+                        AddNoteActivity.TEXT),
                     data.getIntExtra(AddNoteActivity.MOOD, Mood.NONE.ordinal))
                 //wordViewModel.insert(word)
                 listViewModel.insert(note)

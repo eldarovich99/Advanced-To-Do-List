@@ -7,8 +7,8 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import com.devcolibri.eldarovich99.advancedtodolist.R
-import com.devcolibri.eldarovich99.advancedtodolist.ui.AddNoteActivity
-import com.devcolibri.eldarovich99.advancedtodolist.ui.ListActivity
+import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.AddNoteActivity
+import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.view.ListActivity
 
 class DelayedMessageService : IntentService {
     companion object {

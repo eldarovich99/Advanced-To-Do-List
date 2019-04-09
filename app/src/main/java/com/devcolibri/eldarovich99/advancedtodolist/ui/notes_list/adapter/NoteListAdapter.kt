@@ -1,4 +1,4 @@
-package com.devcolibri.eldarovich99.advancedtodolist.ui
+package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView

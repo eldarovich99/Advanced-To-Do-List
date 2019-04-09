@@ -1,4 +1,4 @@
-package com.devcolibri.eldarovich99.advancedtodolist.viewmodel
+package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel
 
 import android.app.Application
 import android.arch.lifecycle.LiveData

@@ -1,4 +1,4 @@
-package com.devcolibri.eldarovich99.advancedtodolist.ui
+package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note
 
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import com.devcolibri.eldarovich99.advancedtodolist.R
+import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
 import kotlinx.android.synthetic.main.activity_add_note.*
 import java.util.*
 
