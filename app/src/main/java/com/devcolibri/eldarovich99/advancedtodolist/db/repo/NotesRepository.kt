@@ -1,4 +1,4 @@
-package com.devcolibri.eldarovich99.advancedtodolist.db
+package com.devcolibri.eldarovich99.advancedtodolist.db.repo
 
 import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread

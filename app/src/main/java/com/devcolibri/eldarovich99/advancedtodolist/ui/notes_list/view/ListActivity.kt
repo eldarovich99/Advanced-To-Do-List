@@ -14,11 +14,10 @@ import com.devcolibri.eldarovich99.advancedtodolist.Injector
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.di.factories.ViewModelFactory
-import com.devcolibri.eldarovich99.advancedtodolist.services.DelayedMessageService
-import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
+import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view.AddNoteActivity
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter.NoteListAdapter
-import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.AddNoteActivity
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel.ListViewModel
+import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
@@ -72,7 +71,7 @@ class ListActivity : AppCompatActivity() {
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.let {
-                val note = Note(Date(data.getLongExtra(AddNoteActivity.DATE, -1)),
+                val note = Note(0,Date(data.getLongExtra(AddNoteActivity.DATE, -1)),
                     data.getStringExtra(AddNoteActivity.TITLE), data.getStringExtra(
                         AddNoteActivity.TEXT),
                     data.getIntExtra(AddNoteActivity.MOOD, Mood.NONE.ordinal))
@@ -85,9 +84,9 @@ class ListActivity : AppCompatActivity() {
                 R.string.empty_not_saved,
                 Toast.LENGTH_LONG).show()
             // launch sample service
-            val anotherIntent = Intent(this, DelayedMessageService::class.java)
-            anotherIntent.putExtra(DelayedMessageService.EXTRA_MESSAGE, "let's add some notes!")
-            startService(anotherIntent)
+//            val anotherIntent = Intent(this, DelayedMessageService::class.java)
+//            anotherIntent.putExtra(DelayedMessageService.EXTRA_MESSAGE, "let's add some notes!")
+//            startService(anotherIntent)
         }
     }
 }

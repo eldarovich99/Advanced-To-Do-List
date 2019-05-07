@@ -1,18 +1,25 @@
-package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note
+package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.widget.Button
 import com.devcolibri.eldarovich99.advancedtodolist.R
+import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter.TaskListAdapter
 import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
 import kotlinx.android.synthetic.main.activity_add_note.*
 import java.util.*
 
 
 class AddNoteActivity : AppCompatActivity() {
+    companion object {
+        const val TITLE = "com.devcolibri.eldarovich99.advancedtodolist.ui.TITLE"
+        const val DATE = "com.devcolibri.eldarovich99.advancedtodolist.ui.DATE"
+        const val TEXT = "com.devcolibri.eldarovich99.advancedtodolist.ui.TEXT"
+        const val MOOD = "com.devcolibri.eldarovich99.advancedtodolist.ui.MOOD"
+    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +48,13 @@ class AddNoteActivity : AppCompatActivity() {
             }
             finish()
         }
+        init()
+    }
+    fun init(){
+        tasks_recycler_view.adapter = TaskListAdapter(this)
+        listViewModel.allNotes.observe(this, Observer { notes->
+            notes?.let { adapter.setNotes(it) }
+        })
     }
 
-    companion object {
-        const val TITLE = "com.devcolibri.eldarovich99.advancedtodolist.ui.TITLE"
-        const val DATE = "com.devcolibri.eldarovich99.advancedtodolist.ui.DATE"
-        const val TEXT = "com.devcolibri.eldarovich99.advancedtodolist.ui.TEXT"
-        const val MOOD = "com.devcolibri.eldarovich99.advancedtodolist.ui.MOOD"
-    }
 }

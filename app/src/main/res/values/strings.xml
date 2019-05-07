@@ -9,4 +9,5 @@
     <string name="mood_nice">Nice</string>
     <string name="question">Question</string>
     <string name="continue_adding">You leave a note, will you add it?</string>
+    <string name="add_task">Add task</string>
 </resources>

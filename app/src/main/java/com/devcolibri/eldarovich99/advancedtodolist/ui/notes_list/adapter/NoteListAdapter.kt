@@ -21,7 +21,7 @@ class NoteListAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val itemView = inflater.inflate(R.layout.recyclerview_note_item, parent, false)
+        val itemView = inflater.inflate(R.layout.note_item, parent, false)
         return NoteViewHolder(itemView)
     }
 
