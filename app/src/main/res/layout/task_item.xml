@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+android:gravity="center_vertical">
 <RadioButton
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/add_task"
-        style="@style/MainText"
 />
+    <EditText
+            android:layout_weight="1"
+            android:hint="@string/add_task"
+            style="@style/MainText"
+            android:ems="10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_round_24dp"
+            android:background="@android:color/transparent"
+    />
 </LinearLayout>

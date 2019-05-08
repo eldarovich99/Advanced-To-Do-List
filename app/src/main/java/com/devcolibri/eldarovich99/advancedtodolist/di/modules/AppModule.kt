@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import com.devcolibri.eldarovich99.advancedtodolist.db.NotesDatabase
 import com.devcolibri.eldarovich99.advancedtodolist.db.dao.NotesDao
+import com.devcolibri.eldarovich99.advancedtodolist.db.dao.TaskDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -28,6 +29,12 @@ class AppModule(var application: Application){
     @Singleton
     fun providesNotesDao(): NotesDao {
         return database.notesDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesTaskDao(): TaskDao{
+        return database.tasksDao()
     }
 
 }

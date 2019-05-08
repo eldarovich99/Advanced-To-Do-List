@@ -8,10 +8,12 @@ import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
-class ViewModelFactory @Inject constructor(var viewModelMap: Map<Class<out ViewModel>,@JvmSuppressWildcards Provider<ViewModel>>): ViewModelProvider.Factory{
+class ViewModelFactory @Inject constructor(var viewModelMap: Map<Class<out ViewModel>,
+        @JvmSuppressWildcards Provider<ViewModel>>): ViewModelProvider.Factory{
     @NonNull
     override fun <T : ViewModel> create(@NonNull modelClass: Class<T>): T {
-        val provider : Provider<ViewModel> = viewModelMap[modelClass] ?: viewModelMap.asIterable().firstOrNull(){ modelClass.isAssignableFrom(it.key) }?.value
+        val provider : Provider<ViewModel> = viewModelMap[modelClass] ?: viewModelMap.asIterable().firstOrNull(){
+            modelClass.isAssignableFrom(it.key) }?.value
         ?: throw IllegalArgumentException("unknown model class " + modelClass)
 
         return try {

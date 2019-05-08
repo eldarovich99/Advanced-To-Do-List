@@ -10,6 +10,6 @@ interface TaskDao {
     fun insert(task:Task)
     @Delete
     fun delete(task: Task)
-    @Query("SELECT * FROM task")
+    @Query("SELECT * FROM tasks_table")
     fun getAllTasks() : LiveData<List<Task>>
 }

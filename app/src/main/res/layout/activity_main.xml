@@ -14,7 +14,7 @@
             android:layout_above="@id/add_image_button"
             tools:listitem="@layout/note_item"/>
     <ImageButton
-            android:src="@drawable/add_icon_round"
+            android:src="@drawable/ic_add_round_48dp"
             android:id="@+id/add_image_button"
             android:layout_width="wrap_content"
             android:background="@android:color/transparent"
