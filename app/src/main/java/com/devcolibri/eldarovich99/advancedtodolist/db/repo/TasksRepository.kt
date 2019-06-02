@@ -8,8 +8,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TasksRepositotory @Inject constructor(val tasksDao: TaskDao) {
-    val allTasks: LiveData<List<Task>> = tasksDao.getAllTasks()
+class TasksRepository @Inject constructor(val tasksDao: TaskDao) {
+    private lateinit var allTasks: LiveData<List<Task>>
+
+    fun setAllTasks(id:Int){
+        allTasks = tasksDao.getAllTasks(id)
+    }
 
     @WorkerThread       // called on a worker thread
     fun insert(task: Task){     // the modifier means that a function can be interrupted and then continued
@@ -19,4 +23,9 @@ class TasksRepositotory @Inject constructor(val tasksDao: TaskDao) {
     fun delete(task: Task){
         tasksDao.delete(task)
     }
+    @WorkerThread
+    fun getTasks(id:Int) : LiveData<List<Task>>{
+        return tasksDao.getAllTasks(id)
+    }
+
 }

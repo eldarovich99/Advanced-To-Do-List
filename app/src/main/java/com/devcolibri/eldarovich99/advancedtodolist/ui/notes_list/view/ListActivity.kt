@@ -2,7 +2,6 @@ package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.view
 
 //import com.devcolibri.eldarovich99.advancedtodolist.di.components.DaggerNotesComponent
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -18,6 +17,9 @@ import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view.AddNoteActi
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter.NoteListAdapter
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel.ListViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
@@ -26,7 +28,7 @@ class ListActivity : AppCompatActivity() {
     @Inject lateinit var listViewModel: ListViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: NoteListAdapter
-
+    private lateinit var disposable: Disposable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,9 +38,12 @@ class ListActivity : AppCompatActivity() {
 
         adapter = NoteListAdapter(applicationContext)
         recycler.adapter = adapter
-        listViewModel.allNotes.observe(this, Observer { notes->
-            notes?.let { adapter.setNotes(it) }
-        })
+        disposable = listViewModel.allNotes
+            .subscribeOn(Schedulers.io())
+            .doOnNext { tasks-> tasks.let { adapter.setNotes(it) } }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+
         add_image_button.setOnClickListener{
             val intent = Intent(this@ListActivity, AddNoteActivity::class.java)
             startActivityForResult(intent,
@@ -70,8 +75,8 @@ class ListActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            data?.let {
-                val note = Note(0,Date(data.getLongExtra(AddNoteActivity.DATE, -1)),
+            data.let {
+                val note = Note(0,Date(data!!.getLongExtra(AddNoteActivity.DATE, -1)),
                     data.getStringExtra(AddNoteActivity.TITLE), data.getStringExtra(
                         AddNoteActivity.TEXT),
                     data.getIntExtra(AddNoteActivity.MOOD, Mood.NONE.ordinal))
@@ -88,5 +93,10 @@ class ListActivity : AppCompatActivity() {
 //            anotherIntent.putExtra(DelayedMessageService.EXTRA_MESSAGE, "let's add some notes!")
 //            startService(anotherIntent)
         }
+    }
+
+    override fun onDestroy() {
+        disposable.dispose()
+        super.onDestroy()
     }
 }

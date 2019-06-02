@@ -1,19 +1,20 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.widget.Button
 import com.devcolibri.eldarovich99.advancedtodolist.Injector
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.di.factories.ViewModelFactory
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter.TaskListAdapter
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel.AddNoteViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_note.*
 import java.util.*
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class AddNoteActivity : AppCompatActivity() {
     @Inject lateinit var listViewModel: AddNoteViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: TaskListAdapter
-
+    private lateinit var disposable: Disposable
     companion object {
         const val TITLE = "com.devcolibri.eldarovich99.advancedtodolist.ui.TITLE"
         const val DATE = "com.devcolibri.eldarovich99.advancedtodolist.ui.DATE"
@@ -35,8 +36,7 @@ class AddNoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_note)
 
         init()
-        val button = findViewById<Button>(R.id.button_save)
-        button.setOnClickListener {
+        button_save.setOnClickListener {
             val replyIntent = Intent()
             if (TextUtils.isEmpty(edit_title.text)) {
                 setResult(Activity.RESULT_CANCELED, replyIntent)
@@ -59,14 +59,22 @@ class AddNoteActivity : AppCompatActivity() {
             finish()
         }
     }
-    fun init(){
+    private fun init(){
         Injector.getAppComponent().inject(this)
         listViewModel = ViewModelProviders.of(this, viewModelFactory).get(listViewModel::class.java)
+
+        listViewModel.init()
         adapter = TaskListAdapter(this)
         tasks_recycler_view.adapter = adapter
-        listViewModel.allTasks.observe(this, Observer { tasks->
-            tasks?.let { adapter.setTasks(it) }
-        })
+        disposable = listViewModel.allTasks
+            .subscribeOn(Schedulers.io())
+            .doOnNext { tasks-> tasks.let { adapter.setTasks(it) } }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
     }
 
+    override fun onDestroy() {
+        disposable.dispose()
+        super.onDestroy()
+    }
 }

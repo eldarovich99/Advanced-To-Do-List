@@ -1,36 +1,61 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import com.devcolibri.eldarovich99.advancedtodolist.db.dao.TaskDao
+import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
-import com.devcolibri.eldarovich99.advancedtodolist.db.repo.TasksRepositotory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.devcolibri.eldarovich99.advancedtodolist.db.repo.NotesRepository
+import com.devcolibri.eldarovich99.advancedtodolist.db.repo.TasksRepository
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
-class AddNoteViewModel @Inject constructor(application: Application, private var taskDao: TaskDao, private var repository: TasksRepositotory):
-    ViewModel() { //If you need the application context, use AndroidViewModel.
-    val allTasks: LiveData<List<Task>> = repository.allTasks
-    private var parentJob = Job()
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
+class AddNoteViewModel @Inject constructor(application: Application,
+                                           private var tasksRepository: TasksRepository,
+                                           private var notesRepository: NotesRepository):
+    ViewModel(){
 
-    fun insert(task: Task) = scope.launch(Dispatchers.IO){
-        repository.insert(task)
+    lateinit var allTasks: Observable<List<Task>>
+    private lateinit var note: Note
+    private lateinit var disposable: Disposable
+
+    fun init(){
+        note = Note()
+        notesRepository.insert(note)
+        disposable = notesRepository.allNotes
+            .subscribeOn(Schedulers.io())
+            .doOnNext {
+                tasksRepository.insert(Task(note.id))
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
     }
 
-    fun delete(task: Task) = scope.launch(Dispatchers.IO) {
-        repository.delete(task)
+    fun init(id: Int){
+
     }
+
+//    fun insert(task: Task) = scope.launch(Dispatchers.IO){
+//        tasksRepository.insert(task)
+//    }
+//
+//    fun delete(task: Task) = scope.launch(Dispatchers.IO) {
+//        tasksRepository.delete(task)
+//    }
+//
+//    fun insert(note: Note) = scope.launch(Dispatchers.IO){
+//        notesRepository.insert(note)
+//    }
+//
+//    fun delete(note: Note) = scope.launch(Dispatchers.IO) {
+//        notesRepository.delete(note)
+//    }
+
 
     override fun onCleared() {
+        disposable.dispose()
         super.onCleared()
-        parentJob.cancel()
     }
 }
