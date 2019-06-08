@@ -1,6 +1,5 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,7 @@ import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
 
 class TaskListAdapter internal constructor(
-    context: Context
 ) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
-
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var tasks = emptyList<Task>() // Cached copy of tasks
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -21,6 +17,7 @@ class TaskListAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
+        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.task_item, parent, false)
         return TaskViewHolder(itemView)
     }

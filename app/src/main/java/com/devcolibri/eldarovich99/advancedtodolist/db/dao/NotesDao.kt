@@ -18,4 +18,8 @@ interface NotesDao {
     @WorkerThread
     @Delete
     fun delete(note: Note)
+
+    @WorkerThread
+    @Query("SELECT * FROM note_table WHERE id = :id")
+    fun getNote(id: Int): Flowable<Note>
 }

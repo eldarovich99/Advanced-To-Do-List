@@ -1,18 +1,18 @@
 package com.devcolibri.eldarovich99.advancedtodolist.db.repo
 
-import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.devcolibri.eldarovich99.advancedtodolist.db.dao.TaskDao
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
+import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TasksRepository @Inject constructor(val tasksDao: TaskDao) {
-    private lateinit var allTasks: LiveData<List<Task>>
+    private lateinit var allTasks: Observable<List<Task>>
 
     fun setAllTasks(id:Int){
-        allTasks = tasksDao.getAllTasks(id)
+        allTasks = tasksDao.getAllTasks(id).toObservable()
     }
 
     @WorkerThread       // called on a worker thread
@@ -24,8 +24,8 @@ class TasksRepository @Inject constructor(val tasksDao: TaskDao) {
         tasksDao.delete(task)
     }
     @WorkerThread
-    fun getTasks(id:Int) : LiveData<List<Task>>{
-        return tasksDao.getAllTasks(id)
+    fun getTasks(id:Int) : Observable<List<Task>>{
+        return tasksDao.getAllTasks(id).toObservable()
     }
 
 }

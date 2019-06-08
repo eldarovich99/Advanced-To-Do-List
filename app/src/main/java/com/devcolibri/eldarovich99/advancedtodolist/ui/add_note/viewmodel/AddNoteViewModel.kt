@@ -8,7 +8,7 @@ import com.devcolibri.eldarovich99.advancedtodolist.db.repo.NotesRepository
 import com.devcolibri.eldarovich99.advancedtodolist.db.repo.TasksRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -17,26 +17,33 @@ class AddNoteViewModel @Inject constructor(application: Application,
                                            private var notesRepository: NotesRepository):
     ViewModel(){
 
-    lateinit var allTasks: Observable<List<Task>>
+    var allTasks: Observable<List<Task>> = Observable.just(emptyList()) // It is necessary to create observable here because fragment subscribes for this
     private lateinit var note: Note
-    private lateinit var disposable: Disposable
+    private val compositeDisposable = CompositeDisposable()
 
-    fun init(){
-        note = Note()
-        notesRepository.insert(note)
-        disposable = notesRepository.allNotes
+    fun init(id: Int){
+        if (id == 0) {
+            note = Note()
+            val disposable = notesRepository.insert(note).doOnComplete{ onNoteAcquired()}.subscribe()
+            compositeDisposable.add(disposable)
+        }
+        else{
+            val disposable =  notesRepository.getNote(id).doOnComplete{ onNoteAcquired()}.subscribe()
+            compositeDisposable.add(disposable)
+        }
+    }
+
+    fun onNoteAcquired(){
+        allTasks = tasksRepository.getTasks(note.id)
+        val disposable = notesRepository.allNotes
             .subscribeOn(Schedulers.io())
             .doOnNext {
                 tasksRepository.insert(Task(note.id))
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
+        compositeDisposable.add(disposable)
     }
-
-    fun init(id: Int){
-
-    }
-
 //    fun insert(task: Task) = scope.launch(Dispatchers.IO){
 //        tasksRepository.insert(task)
 //    }
@@ -55,7 +62,7 @@ class AddNoteViewModel @Inject constructor(application: Application,
 
 
     override fun onCleared() {
-        disposable.dispose()
+        compositeDisposable.dispose()
         super.onCleared()
     }
 }
