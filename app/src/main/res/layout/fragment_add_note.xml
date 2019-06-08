@@ -66,6 +66,6 @@
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    />
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/radio_group_mood"/>
 
 </android.support.constraint.ConstraintLayout>

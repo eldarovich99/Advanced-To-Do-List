@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,11 +89,14 @@ class AddNoteFragment : Fragment() {
         disposable = listViewModel.allTasks
             .subscribeOn(Schedulers.io())
             .doOnNext { tasks-> tasks.let {
-                    adapter.setTasks(it)
+                    Log.d("Fragment", tasks.size.toString())
                 }
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
+            .subscribe{
+                Log.d("FragmentAdapter", it.size.toString())
+                adapter.setTasks(it)
+            }
     }
 
     override fun onDestroy() {

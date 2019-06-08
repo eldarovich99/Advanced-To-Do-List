@@ -14,7 +14,7 @@ class TaskListAdapter internal constructor(
     private var tasks = emptyList<Task>() // Cached copy of tasks
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val wordItemView: TextView = itemView.findViewById(R.id.title)
+        val wordItemView: TextView = itemView.findViewById(R.id.task_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -29,7 +29,7 @@ class TaskListAdapter internal constructor(
     }
 
     internal fun setTasks(tasks: List<Task>) {
-        Log.d("msg:", tasks.size.toString())
+        Log.d("adapter:", tasks.size.toString())
         this.tasks = tasks
         notifyDataSetChanged()
     }
