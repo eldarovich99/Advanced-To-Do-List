@@ -11,24 +11,24 @@ import javax.inject.Singleton
 
 @Singleton
 class NotesRepository @Inject constructor(val notesDao: NotesDao) {
-    val allNotes: Observable<List<Note>> = notesDao.getAllNotes().toObservable()
+    fun getNotes(): Observable<List<Note>>{
+        return notesDao.getAllNotes().toObservable()
+    }
+
     fun insert(note: Note): Completable{
         return Completable.fromAction{ notesDao.insert(note) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            //.subscribe()
     }
     fun delete(note: Note) : Completable{
         return Completable.fromAction{ notesDao.delete(note) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            //.subscribe()
     }
 
     fun getNote(id: Int) : Completable{
         return Completable.fromAction{ notesDao.getNote(id)}
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            //.subscribe()
     }
 }

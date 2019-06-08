@@ -24,23 +24,34 @@ class AddNoteViewModel @Inject constructor(application: Application,
     fun init(id: Int){
         if (id == 0) {
             note = Note()
-            val disposable = notesRepository.insert(note).doOnComplete{ onNoteAcquired()}.subscribe()
+            val disposable = notesRepository.insert(note).doOnComplete{ onNoteAcquired(id)}.subscribe()
             compositeDisposable.add(disposable)
         }
         else{
-            val disposable =  notesRepository.getNote(id).doOnComplete{ onNoteAcquired()}.subscribe()
+            val disposable =  notesRepository.getNote(id).doOnComplete{ onNoteAcquired(id)}.subscribe()
             compositeDisposable.add(disposable)
         }
     }
 
-    fun onNoteAcquired(){
-        allTasks = tasksRepository.getTasks(note.id)
-        val disposable = notesRepository.allNotes
+    fun onNoteAcquired(id: Int){
+        val disposable = notesRepository.getNote(id)
             .subscribeOn(Schedulers.io())
-            .doOnNext {
-                tasksRepository.insert(Task(note.id))
+            .doOnComplete {
+                insertAndUpdateTasks()
+//                tasksRepository.insert(Task(note.id))
+//                allTasks = tasksRepository.getTasks(note.id)
             }
             .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+        compositeDisposable.add(disposable)
+    }
+
+    fun insertAndUpdateTasks(){
+        val disposable = tasksRepository.insert(Task(note.id))
+            .doOnComplete{
+                allTasks = tasksRepository.getTasks(note.id)
+                //Log.d("addNote", allTasks.toString())
+            }
             .subscribe()
         compositeDisposable.add(disposable)
     }

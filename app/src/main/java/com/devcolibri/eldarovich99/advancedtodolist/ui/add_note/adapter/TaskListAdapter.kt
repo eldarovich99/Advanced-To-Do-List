@@ -1,6 +1,7 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class TaskListAdapter internal constructor(
     }
 
     internal fun setTasks(tasks: List<Task>) {
+        Log.d("msg:", tasks.size.toString())
         this.tasks = tasks
         notifyDataSetChanged()
     }

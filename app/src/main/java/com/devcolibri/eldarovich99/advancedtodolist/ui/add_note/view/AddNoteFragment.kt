@@ -1,7 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.TextUtils
@@ -56,7 +55,7 @@ class AddNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         init()
         button_save.setOnClickListener {
-            val replyIntent = Intent()
+            //val replyIntent = Intent()
             if (TextUtils.isEmpty(edit_title.text)) {
                 //activity!!.setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
@@ -69,10 +68,10 @@ class AddNoteFragment : Fragment() {
                     radio_button_nice.id -> Mood.NICE
                     else -> Mood.NONE
                 }
-                replyIntent.putExtra(TITLE, title)
-                replyIntent.putExtra(DATE, date.time)
-                replyIntent.putExtra(TEXT, text)
-                replyIntent.putExtra(MOOD, mood)
+//                replyIntent.putExtra(TITLE, title)
+//                replyIntent.putExtra(DATE, date.time)
+//                replyIntent.putExtra(TEXT, text)
+//                replyIntent.putExtra(MOOD, mood)
                 //activity!!.setResult(Activity.RESULT_OK, replyIntent)
             }
             //activity!!.finish()
@@ -88,7 +87,10 @@ class AddNoteFragment : Fragment() {
         tasks_recycler_view.adapter = adapter
         disposable = listViewModel.allTasks
             .subscribeOn(Schedulers.io())
-            .doOnNext { tasks-> tasks.let { adapter.setTasks(it) } }
+            .doOnNext { tasks-> tasks.let {
+                    adapter.setTasks(it)
+                }
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
     }
