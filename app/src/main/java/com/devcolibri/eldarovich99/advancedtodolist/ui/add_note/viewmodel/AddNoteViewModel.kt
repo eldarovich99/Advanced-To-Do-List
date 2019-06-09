@@ -36,11 +36,21 @@ class AddNoteViewModel @Inject constructor(application: Application,
     fun setTasks(id: Int){
          val disposable = tasksRepository.getTasks(note.id)
                     .subscribeOn(Schedulers.io())
-                    .doOnNext { allTasks.onNext(it) }
-                    //.observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{
-                        allTasks.onNext(it)
+                    .doOnNext {
+                        if (it.isEmpty())
+                            allTasks.onNext(listOf(Task()))
+                        else
+                            allTasks.onNext(it)
                     }
+                    //.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+        compositeDisposable.add(disposable)
+    }
+
+    fun insert(note: Note){
+        val disposable = notesRepository.insert(note)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
         compositeDisposable.add(disposable)
     }
     override fun onCleared() {

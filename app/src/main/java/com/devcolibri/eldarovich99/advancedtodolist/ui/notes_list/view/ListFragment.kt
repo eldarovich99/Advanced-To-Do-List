@@ -39,6 +39,7 @@ class ListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        retainInstance = true
         Injector.getAppComponent().inject(this)
         listViewModel = ViewModelProviders.of(this, viewModelFactory).get(listViewModel:: class.java)
 
@@ -106,8 +107,11 @@ class ListFragment : Fragment() {
 
     override fun onDestroy() {
         disposable.dispose()
+        activity?.finish()
         super.onDestroy()
     }
+
+
 }
 interface IOpenFragmentListener{
     fun openFragment(id: Int)

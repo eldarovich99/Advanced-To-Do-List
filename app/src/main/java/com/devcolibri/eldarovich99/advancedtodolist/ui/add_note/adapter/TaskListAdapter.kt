@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
+import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.view.IAddTaskListener
 
-class TaskListAdapter internal constructor(
+class TaskListAdapter internal constructor(val listener: IAddTaskListener
 ) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     private var tasks = emptyList<Task>() // Cached copy of tasks
 
@@ -20,6 +21,9 @@ class TaskListAdapter internal constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.task_item, parent, false)
+        itemView.setOnClickListener{
+            listener.addTask()
+        }
         return TaskViewHolder(itemView)
     }
 
