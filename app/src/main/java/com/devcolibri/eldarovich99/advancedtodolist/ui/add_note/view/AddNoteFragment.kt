@@ -37,7 +37,7 @@ class AddNoteFragment : Fragment() {
     }
 
     companion object {
-        fun getInstance(id:Int) : AddNoteFragment{
+        fun newInstance(id:Int) : AddNoteFragment{
             val bundle = Bundle()
             bundle.putInt(ID,id)
             val fragment = AddNoteFragment()
@@ -56,7 +56,6 @@ class AddNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         init()
         button_save.setOnClickListener {
-            //val replyIntent = Intent()
             if (TextUtils.isEmpty(edit_title.text)) {
                 //activity!!.setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
@@ -69,11 +68,6 @@ class AddNoteFragment : Fragment() {
                     radio_button_nice.id -> Mood.NICE
                     else -> Mood.NONE
                 }
-//                replyIntent.putExtra(TITLE, title)
-//                replyIntent.putExtra(DATE, date.time)
-//                replyIntent.putExtra(TEXT, text)
-//                replyIntent.putExtra(MOOD, mood)
-                //activity!!.setResult(Activity.RESULT_OK, replyIntent)
             }
             //activity!!.finish()
         }
@@ -81,22 +75,21 @@ class AddNoteFragment : Fragment() {
     }
 
     private fun init(){
-
         val id = arguments?.get(ID) as Int
-        listViewModel.init(id)
-        adapter = TaskListAdapter()
-        tasks_recycler_view.adapter = adapter
         disposable = listViewModel.allTasks
             .subscribeOn(Schedulers.io())
             .doOnNext { tasks-> tasks.let {
-                    Log.d("Fragment", tasks.size.toString())
-                }
+                Log.d("Fragment", tasks.size.toString())
+            }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
                 Log.d("FragmentAdapter", it.size.toString())
                 adapter.setTasks(it)
             }
+        listViewModel.init(id)
+        adapter = TaskListAdapter()
+        tasks_recycler_view.adapter = adapter
     }
 
     override fun onDestroy() {

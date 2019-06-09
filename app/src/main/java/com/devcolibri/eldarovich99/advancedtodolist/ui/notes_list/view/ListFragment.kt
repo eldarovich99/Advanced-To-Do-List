@@ -58,7 +58,15 @@ class ListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = NoteListAdapter()
+        adapter = NoteListAdapter(object : IOpenFragmentListener{
+            override fun openFragment(id: Int) {
+                activity!!.supportFragmentManager!!
+                    .beginTransaction()
+                    .replace(R.id.container, AddNoteFragment.newInstance(id))
+                    .addToBackStack(null)
+                    .commit()
+            }
+            })
         recycler.adapter = adapter
         disposable = listViewModel.allNotes
             .subscribeOn(Schedulers.io())
@@ -68,7 +76,7 @@ class ListFragment : Fragment() {
 
         add_image_button.setOnClickListener{
             activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, AddNoteFragment.getInstance(0))
+                .replace(R.id.container, AddNoteFragment.newInstance(0))
                 .addToBackStack(null)
                 .commit()
         }
@@ -100,4 +108,7 @@ class ListFragment : Fragment() {
         disposable.dispose()
         super.onDestroy()
     }
+}
+interface IOpenFragmentListener{
+    fun openFragment(id: Int)
 }

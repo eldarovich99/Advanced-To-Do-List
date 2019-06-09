@@ -1,15 +1,17 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter
 
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
+import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.view.IOpenFragmentListener
 
-class NoteListAdapter(
-) : RecyclerView.Adapter<NoteListAdapter.NoteViewHolder>() {
+class NoteListAdapter internal constructor(val listener: IOpenFragmentListener)
+    : RecyclerView.Adapter<NoteListAdapter.NoteViewHolder>() {
     private var notes = emptyList<Note>() // Cached copy of notes
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,7 +26,13 @@ class NoteListAdapter(
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val current = notes[position]
-        holder.wordItemView.text = current.title
+        if (TextUtils.isEmpty(current.title))
+            holder.wordItemView.text = "Без названия"
+        else
+            holder.wordItemView.text = current.title
+        holder.wordItemView.setOnClickListener{
+            listener.openFragment(position)
+        }
     }
 
     internal fun setNotes(words: List<Note>) {
