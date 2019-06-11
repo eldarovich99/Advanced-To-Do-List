@@ -1,6 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.di.modules
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.di.components.ViewModelKey
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel.AddNoteViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel.ListViewModel

@@ -1,7 +1,8 @@
 package com.devcolibri.eldarovich99.advancedtodolist.di.modules
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.fragment.app.FragmentActivity
+import androidx.room.Room
 import com.devcolibri.eldarovich99.advancedtodolist.db.NotesDatabase
 import com.devcolibri.eldarovich99.advancedtodolist.db.dao.NotesDao
 import com.devcolibri.eldarovich99.advancedtodolist.db.dao.TaskDao
@@ -36,5 +37,9 @@ class AppModule(var application: Application){
     fun providesTaskDao(): TaskDao{
         return database.tasksDao()
     }
-
+    @Provides
+    @Singleton
+    fun provideActivity(): FragmentActivity {
+        return FragmentActivity()
+    }
 }

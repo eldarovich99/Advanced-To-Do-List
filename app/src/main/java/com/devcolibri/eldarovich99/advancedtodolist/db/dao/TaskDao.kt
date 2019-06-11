@@ -1,6 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.db.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
 import io.reactivex.Flowable
 

@@ -1,6 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.db.repo.NotesRepository
 import io.reactivex.Observable

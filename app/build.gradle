@@ -25,7 +25,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0'
     testImplementation 'junit:junit:4.12'
@@ -60,4 +60,13 @@ dependencies {
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    // Biometric library
+    implementation 'androidx.biometric:biometric:1.0.0-alpha04'
+
+    // Secure shared preferences
+    implementation 'com.scottyab:secure-preferences-lib:0.1.7'
+
+    // LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
 }

@@ -1,7 +1,7 @@
 package com.devcolibri.eldarovich99.advancedtodolist.db.entity
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "note_table")

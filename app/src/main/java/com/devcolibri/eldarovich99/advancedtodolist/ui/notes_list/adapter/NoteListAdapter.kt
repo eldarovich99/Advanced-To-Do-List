@@ -1,11 +1,11 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.ui.notes_list.view.IOpenFragmentListener

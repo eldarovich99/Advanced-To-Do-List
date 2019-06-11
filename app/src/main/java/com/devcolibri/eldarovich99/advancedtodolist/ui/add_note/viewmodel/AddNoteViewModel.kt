@@ -1,7 +1,7 @@
 package com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
 import com.devcolibri.eldarovich99.advancedtodolist.db.repo.NotesRepository

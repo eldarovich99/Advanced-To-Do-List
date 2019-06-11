@@ -1,6 +1,6 @@
 package com.devcolibri.eldarovich99.advancedtodolist.db.repo
 
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 import com.devcolibri.eldarovich99.advancedtodolist.db.dao.TaskDao
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
 import io.reactivex.Completable
