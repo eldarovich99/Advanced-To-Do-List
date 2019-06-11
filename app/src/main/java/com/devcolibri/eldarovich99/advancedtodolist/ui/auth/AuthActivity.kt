@@ -9,16 +9,21 @@ import kotlinx.android.synthetic.main.activity_auth.*
 
 class AuthActivity : AppCompatActivity() {
     //@Inject
-    lateinit var authPresenter: AuthPresenter
+    var authPresenter = AuthPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         //Injector.getAppComponent().inject(this)
         setContentView(R.layout.activity_auth)
-        authPresenter = AuthPresenter(this)
+        authPresenter.onViewCreated(this)
 
         launchAuthenticationButton.setOnClickListener{
             authPresenter.authenticate()
         }
+    }
+
+    override fun onDestroy() {
+        authPresenter.onActivityDestroyed()
+        super.onDestroy()
     }
 }
