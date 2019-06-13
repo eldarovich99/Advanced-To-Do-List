@@ -15,15 +15,19 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //Injector.getAppComponent().inject(this)
         setContentView(R.layout.activity_auth)
-        authPresenter.onViewCreated(this)
 
         launchAuthenticationButton.setOnClickListener{
             authPresenter.authenticate()
         }
     }
 
-    override fun onDestroy() {
+    override fun onStart() {
+        authPresenter.onViewCreated(this)
+        super.onStart()
+    }
+
+    override fun onStop() {
         authPresenter.onActivityDestroyed()
-        super.onDestroy()
+        super.onStop()
     }
 }
