@@ -16,10 +16,11 @@ android:gravity="center_vertical">
             android:ems="10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/add_task_image_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_round_24dp"
+            android:src="@drawable/ic_add_round_48dp"
             android:background="@android:color/transparent"
     />
 </LinearLayout>

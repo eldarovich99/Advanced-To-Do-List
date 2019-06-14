@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.devcolibri.eldarovich99.advancedtodolist.Injector
 import com.devcolibri.eldarovich99.advancedtodolist.R
 import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Note
+import com.devcolibri.eldarovich99.advancedtodolist.db.entity.Task
 import com.devcolibri.eldarovich99.advancedtodolist.di.factories.ViewModelFactory
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter.TaskListAdapter
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel.AddNoteViewModel
@@ -89,7 +91,10 @@ class AddNoteFragment : Fragment() {
         listViewModel.init(id)
         adapter = TaskListAdapter(object: IAddTaskListener{
             override fun addTask() {
-                //listViewModel.allTasks.onNext(listViewModel.allTasks.onNext(Task()))
+                Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show()
+                listViewModel.allTasks.value.add(Task())
+                println(listViewModel.allTasks.value)
+                listViewModel.allTasks.onNext(listViewModel.allTasks.value)
             }
         })
         tasks_recycler_view.adapter = adapter

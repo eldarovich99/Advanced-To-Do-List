@@ -16,7 +16,7 @@ class AddNoteViewModel @Inject constructor(application: Application,
                                            private var notesRepository: NotesRepository):
     ViewModel(){
 
-    var allTasks = BehaviorSubject.create<List<Task>>()
+    var allTasks = BehaviorSubject.create<MutableList<Task>>()
     private lateinit var note: Note
     private val compositeDisposable = CompositeDisposable()
 
@@ -29,7 +29,7 @@ class AddNoteViewModel @Inject constructor(application: Application,
             compositeDisposable.add(disposable)
         }
         else{
-            allTasks.onNext(listOf(Task()))
+            allTasks.onNext(mutableListOf(Task()))
         }
     }
 
@@ -38,9 +38,9 @@ class AddNoteViewModel @Inject constructor(application: Application,
                     .subscribeOn(Schedulers.io())
                     .doOnNext {
                         if (it.isEmpty())
-                            allTasks.onNext(listOf(Task()))
+                            allTasks.onNext(mutableListOf(Task()))
                         else
-                            allTasks.onNext(it)
+                            allTasks.onNext(it.toMutableList())
                     }
                     //.observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
