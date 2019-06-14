@@ -20,7 +20,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
 const val TITLE = "com.devcolibri.eldarovich99.advancedtodolist.ui.TITLE"
 const val DATE = "com.devcolibri.eldarovich99.advancedtodolist.ui.DATE"
@@ -67,8 +66,8 @@ class AddNoteFragment : Fragment() {
                 radio_button_nice.id -> Mood.NICE
                 else -> Mood.NONE
             }
-            val note = Note(0, date, title, text, mood.ordinal.absoluteValue) // Maybe I should encapsulate this
-            // logic of adding mood by providing converter for Room to convert Mood into Int
+            val note = Note(0, date, title, text, mood)
+            listViewModel.insert(note)
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
         super.onViewCreated(view, savedInstanceState)
