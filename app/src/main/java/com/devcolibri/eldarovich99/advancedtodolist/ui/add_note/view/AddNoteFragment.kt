@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.devcolibri.eldarovich99.advancedtodolist.Injector
@@ -17,7 +16,7 @@ import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.adapter.TaskList
 import com.devcolibri.eldarovich99.advancedtodolist.ui.add_note.viewmodel.AddNoteViewModel
 import com.devcolibri.eldarovich99.advancedtodolist.utils.Mood
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import java.util.*
@@ -33,7 +32,7 @@ class AddNoteFragment : Fragment() {
     @Inject lateinit var listViewModel: AddNoteViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: TaskListAdapter
-    private lateinit var disposable: Disposable
+    private var compositeDisposable = CompositeDisposable()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_note, container, false)
     }
@@ -61,7 +60,7 @@ class AddNoteFragment : Fragment() {
         button_save.setOnClickListener {
             val title = edit_title.text.toString()
             val date = Date()
-            val text = edit_note.text.toString()
+            val text = edit_note_content.text.toString()
             val mood = when (radio_group_mood.checkedRadioButtonId){
                 radio_button_bad.id -> Mood.BAD
                 radio_button_average.id -> Mood.AVERAGE
@@ -70,14 +69,14 @@ class AddNoteFragment : Fragment() {
             }
             val note = Note(0, date, title, text, mood)
             listViewModel.insert(note)
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+            activity?.supportFragmentManager?.popBackStack()
         }
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun init(){
         val id = arguments?.get(ID) as Int
-        disposable = listViewModel.allTasks
+        var disposable = listViewModel.allTasks
             .subscribeOn(Schedulers.io())
             .doOnNext { tasks-> tasks.let {
                 Log.d("Fragment", tasks.size.toString())
@@ -88,10 +87,14 @@ class AddNoteFragment : Fragment() {
                 Log.d("FragmentAdapter", it.size.toString())
                 adapter.setTasks(it)
             }
+        compositeDisposable.add(disposable)
+        disposable = listViewModel.note.doOnNext {
+            setNote(it)
+        }.subscribe()
+        compositeDisposable.add(disposable)
         listViewModel.init(id)
         adapter = TaskListAdapter(object: IAddTaskListener{
             override fun addTask() {
-                Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show()
                 listViewModel.allTasks.value.add(Task())
                 println(listViewModel.allTasks.value)
                 listViewModel.allTasks.onNext(listViewModel.allTasks.value)
@@ -100,8 +103,13 @@ class AddNoteFragment : Fragment() {
         tasks_recycler_view.adapter = adapter
     }
 
+    private fun setNote(note: Note?) {
+        edit_title.setText(note?.title)
+        edit_note_content.setText(note?.text)
+    }
+
     override fun onDestroy() {
-        disposable.dispose()
+        compositeDisposable.dispose()
         super.onDestroy()
     }
 }

@@ -31,7 +31,7 @@ class NoteListAdapter internal constructor(val listener: IOpenFragmentListener)
         else
             holder.wordItemView.text = current.title
         holder.wordItemView.setOnClickListener{
-            listener.openFragment(position)
+            listener.openFragment(notes[position].id)
         }
     }
 
