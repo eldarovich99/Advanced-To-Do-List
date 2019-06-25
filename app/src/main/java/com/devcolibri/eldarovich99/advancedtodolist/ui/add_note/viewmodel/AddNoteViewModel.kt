@@ -44,7 +44,6 @@ class AddNoteViewModel @Inject constructor(val application: Application,
                         else
                             allTasks.onNext(it.toMutableList())
                     }
-                    //.observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
         compositeDisposable.add(disposable)
     }
@@ -55,12 +54,15 @@ class AddNoteViewModel @Inject constructor(val application: Application,
 
     fun insert(note: Note){
         val disposable = notesRepository.insert(note)
-            .subscribeOn(Schedulers.io())
             .subscribe()
         compositeDisposable.add(disposable)
     }
     override fun onCleared() {
         compositeDisposable.dispose()
         super.onCleared()
+    }
+
+    fun update(note: Note) {
+        notesRepository.update(note).subscribe()
     }
 }

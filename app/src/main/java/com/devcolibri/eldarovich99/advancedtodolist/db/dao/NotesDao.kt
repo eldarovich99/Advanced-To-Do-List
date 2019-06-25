@@ -22,4 +22,8 @@ interface NotesDao {
     @WorkerThread
     @Query("SELECT * FROM note_table WHERE id = :id")
     fun getNote(id: Int): Flowable<Note>
+
+    @WorkerThread
+    @Update
+    fun update(note: Note)
 }

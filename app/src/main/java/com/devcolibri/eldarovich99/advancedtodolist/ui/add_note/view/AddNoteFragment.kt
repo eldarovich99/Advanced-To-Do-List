@@ -32,6 +32,7 @@ class AddNoteFragment : Fragment() {
     @Inject lateinit var listViewModel: AddNoteViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: TaskListAdapter
+    private var noteId = -1
     private var compositeDisposable = CompositeDisposable()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_note, container, false)
@@ -67,19 +68,32 @@ class AddNoteFragment : Fragment() {
                 radio_button_nice.id -> Mood.NICE
                 else -> Mood.NONE
             }
-            val note = Note(0, date, title, text, mood)
-            listViewModel.insert(note)
+            val note = Note(noteId, date, title, text, mood)
+            if (noteId != 0) {
+                listViewModel.update(note)
+            }
+            else {
+                listViewModel.insert(note)
+            }
             activity?.supportFragmentManager?.popBackStack()
         }
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun init(){
-        val id = arguments?.get(ID) as Int
+        noteId = arguments?.get(ID) as Int
+        adapter = TaskListAdapter(object: IAddTaskListener{
+            override fun addTask() {
+                listViewModel.allTasks.value.add(Task())
+                println(listViewModel.allTasks.value)
+                listViewModel.allTasks.onNext(listViewModel.allTasks.value)
+            }
+        })
         var disposable = listViewModel.allTasks
             .subscribeOn(Schedulers.io())
             .doOnNext { tasks-> tasks.let {
                 Log.d("Fragment", tasks.size.toString())
+                adapter.setTasks(it)
             }
             }
             .observeOn(AndroidSchedulers.mainThread())
@@ -92,14 +106,7 @@ class AddNoteFragment : Fragment() {
             setNote(it)
         }.subscribe()
         compositeDisposable.add(disposable)
-        listViewModel.init(id)
-        adapter = TaskListAdapter(object: IAddTaskListener{
-            override fun addTask() {
-                listViewModel.allTasks.value.add(Task())
-                println(listViewModel.allTasks.value)
-                listViewModel.allTasks.onNext(listViewModel.allTasks.value)
-            }
-        })
+        listViewModel.init(noteId)
         tasks_recycler_view.adapter = adapter
     }
 

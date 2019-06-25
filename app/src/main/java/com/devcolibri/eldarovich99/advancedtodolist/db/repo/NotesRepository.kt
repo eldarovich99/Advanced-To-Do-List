@@ -28,8 +28,12 @@ class NotesRepository @Inject constructor(val notesDao: NotesDao) {
 
     fun getNote(id: Int) : Observable<Note>{
         return notesDao.getNote(id).subscribeOn(Schedulers.io()).toObservable()
-//        return Completable.fromAction{ notesDao.getNote(id)}
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun update(note: Note) : Completable {
+        return Completable.fromAction {
+            notesDao.update(note)
+        }
+            .subscribeOn(Schedulers.io())
     }
 }
